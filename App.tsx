@@ -1,14 +1,11 @@
-/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {SafeAreaView, Text} from 'react-native';
-import {getFontFamily} from './assets/fonts/fontHelper';
+import {SafeAreaView} from 'react-native';
+import Title from './components/Title/Title';
 
 const App = () => {
   return (
     <SafeAreaView>
-      <Text style={{fontSize: 30, fontFamily: getFontFamily('Inter', '300')}}>
-        My App
-      </Text>
+      <Title title="Hello World" />
     </SafeAreaView>
   );
 };
