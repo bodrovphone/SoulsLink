@@ -4,5 +4,6 @@
   "files.autoSave": "onWindowChange",
   "editor.codeActionsOnSave": {
     "source.organizeImports": "always"
-  }
+  },
+  "editor.autoClosingBrackets": "always"
 }
