@@ -1,6 +1,7 @@
 import React from 'react';
-import {Image, ImageSourcePropType, Text, View} from 'react-native';
+import {ImageSourcePropType, Text, View} from 'react-native';
 
+import UserProfileImage from '../UserProfileImage/UserProfileImage';
 import style from './style';
 
 type Props = {
@@ -11,9 +12,7 @@ type Props = {
 const UserStory = (props: Props) => {
   return (
     <View style={style.storyContainer}>
-      <View style={style.userImageContainer}>
-        <Image source={props.profileImage} style={style.image} />
-      </View>
+      <UserProfileImage profileImage={props.profileImage} />
       <Text style={style.firstName}>{props.firstName}</Text>
     </View>
   );
