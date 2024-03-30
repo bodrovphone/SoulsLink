@@ -5,12 +5,20 @@ import style from './style';
 
 type Props = {
   profileImage: ImageSourcePropType;
+  imageDimensions: number;
 };
 
 const UserProfileImage = (props: Props) => {
   return (
-    <View style={style.userImageContainer}>
-      <Image source={props.profileImage} style={style.image} />
+    <View
+      style={[style.userImageContainer, {borderRadius: props.imageDimensions}]}>
+      <Image
+        source={props.profileImage}
+        style={{
+          width: props.imageDimensions,
+          height: props.imageDimensions,
+        }}
+      />
     </View>
   );
 };
