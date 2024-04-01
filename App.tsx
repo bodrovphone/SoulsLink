@@ -11,64 +11,26 @@ import {
 import Title from './components/Title/Title';
 
 import globalStyle from './assets/styles/globalStyle';
+import {UserPost} from './components/UserPost/UserPost';
 import UserStory from './components/UserStory/UserStory';
-import {Story} from './types';
+import {userPosts} from './data/userPosts';
+import {userStories} from './data/userStories';
+import {Post, Story} from './types';
 
 const App = () => {
-  const userStories: Story[] = [
-    {
-      firstName: 'Joseph',
-      id: 1,
-      profileImage: require('./assets/images/default_profile.png'),
-    },
-    {
-      firstName: 'Jane',
-      id: 2,
-      profileImage: require('./assets/images/default_profile.png'),
-    },
-    {
-      firstName: 'John',
-      id: 3,
-      profileImage: require('./assets/images/default_profile.png'),
-    },
-    {
-      firstName: 'Jessica',
-      id: 4,
-      profileImage: require('./assets/images/default_profile.png'),
-    },
-    {
-      firstName: 'Markus',
-      id: 5,
-      profileImage: require('./assets/images/default_profile.png'),
-    },
-    {
-      firstName: 'Olivia',
-      id: 6,
-      profileImage: require('./assets/images/default_profile.png'),
-    },
-    {
-      firstName: 'Nina',
-      id: 7,
-      profileImage: require('./assets/images/default_profile.png'),
-    },
-    {
-      firstName: 'Alex',
-      id: 8,
-      profileImage: require('./assets/images/default_profile.png'),
-    },
-    {
-      firstName: 'Max',
-      id: 9,
-      profileImage: require('./assets/images/default_profile.png'),
-    },
-  ];
-
   const userStoriesPageSize = 4;
   const [userStoriesCurrentPage, setUserStoriesCurrentPage] = React.useState(1);
   const [userStoriesRenderedData, setUserStoriesRenderedData] = React.useState<
     Story[]
   >([]);
-  const [isLoading, setIsLoading] = React.useState(false);
+  const [isLoadingStories, setIsLoadingStories] = React.useState(false);
+
+  const userPostsPageSize = 4;
+  const [userPostsCurrentPage, setUserPostsCurrentPage] = React.useState(1);
+  const [userPostsRenderedData, setUserPostsRenderedData] = React.useState<
+    Post[]
+  >([]);
+  const [isLoadingPosts, setIsLoadingPosts] = React.useState(false);
 
   const pagination = (data: Story[], currentPage: number, pageSize: number) => {
     const startIndex = (currentPage - 1) * pageSize;
@@ -80,58 +42,93 @@ const App = () => {
   };
 
   React.useEffect(() => {
-    setIsLoading(true);
+    setIsLoadingStories(true);
     const initialData = pagination(
       userStories,
       userStoriesCurrentPage,
       userStoriesPageSize,
     );
     setUserStoriesRenderedData(initialData);
-    setIsLoading(false);
+    setIsLoadingStories(false);
   }, []);
 
   return (
     <SafeAreaView>
-      <View style={globalStyle.header}>
-        <Title title="Hello World" />
-        <TouchableOpacity style={globalStyle.messageIcon}>
-          <FontAwesomeIcon icon={faEnvelope} size={20} color={'#898DAE'} />
-          <View style={globalStyle.messageNumberContainer}>
-            <Text style={globalStyle.messageNumberText}>2</Text>
-          </View>
-        </TouchableOpacity>
-      </View>
-      <View style={globalStyle.userStoryContainer}>
+      <View>
         <FlatList
+          ListHeaderComponent={
+            <>
+              <View style={globalStyle.header}>
+                <Title title="Hello World" />
+                <TouchableOpacity style={globalStyle.messageIcon}>
+                  <FontAwesomeIcon
+                    icon={faEnvelope}
+                    size={20}
+                    color={'#898DAE'}
+                  />
+                  <View style={globalStyle.messageNumberContainer}>
+                    <Text style={globalStyle.messageNumberText}>2</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+              <View style={globalStyle.userStoryContainer}>
+                <FlatList
+                  //   ListHeaderComponent={}
+                  renderItem={({item}) => {
+                    return (
+                      <UserStory
+                        key={item.id}
+                        firstName={item.firstName}
+                        profileImage={item.profileImage}
+                      />
+                    );
+                  }}
+                  data={userStoriesRenderedData}
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  onEndReachedThreshold={0.5}
+                  onEndReached={() => {
+                    if (isLoadingStories) {
+                      return;
+                    }
+                    setIsLoadingStories(true);
+                    const contentToAppend = pagination(
+                      userStories,
+                      userStoriesCurrentPage + 1,
+                      userStoriesPageSize,
+                    );
+                    if (contentToAppend.length === 0) {
+                      return;
+                    }
+                    setUserStoriesCurrentPage(userStoriesCurrentPage + 1);
+                    setUserStoriesRenderedData(prev => [
+                      ...prev,
+                      ...contentToAppend,
+                    ]);
+                    setIsLoadingStories(false);
+                  }}
+                />
+              </View>
+            </>
+          }
+          data={userPosts}
+          showsVerticalScrollIndicator={false}
           renderItem={({item}) => {
             return (
-              <UserStory
-                key={item.id}
-                firstName={item.firstName}
-                profileImage={item.profileImage}
-              />
+              <View style={globalStyle.userPostContainer}>
+                <UserPost
+                  key={item.id}
+                  firstName={item.firstName}
+                  lastName={item.lastName}
+                  comments={item.comments}
+                  likes={item.likes}
+                  bookmarks={item.bookmarks}
+                  image={item.image}
+                  profileImage={item.profileImage}
+                  location={item.location}
+                />
+              </View>
             );
-          }}
-          data={userStoriesRenderedData}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          onEndReachedThreshold={0.5}
-          onEndReached={() => {
-            if (isLoading) {
-              return;
-            }
-            setIsLoading(true);
-            const contentToAppend = pagination(
-              userStories,
-              userStoriesCurrentPage + 1,
-              userStoriesPageSize,
-            );
-            if (contentToAppend.length === 0) {
-              return;
-            }
-            setUserStoriesCurrentPage(userStoriesCurrentPage + 1);
-            setUserStoriesRenderedData(prev => [...prev, ...contentToAppend]);
-            setIsLoading(false);
           }}
         />
       </View>
