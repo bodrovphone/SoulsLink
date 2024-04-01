@@ -12,9 +12,10 @@ import Title from './components/Title/Title';
 
 import globalStyle from './assets/styles/globalStyle';
 import UserStory from './components/UserStory/UserStory';
+import {Story} from './types';
 
 const App = () => {
-  const userStories = [
+  const userStories: Story[] = [
     {
       firstName: 'Joseph',
       id: 1,
@@ -61,6 +62,34 @@ const App = () => {
       profileImage: require('./assets/images/default_profile.png'),
     },
   ];
+
+  const userStoriesPageSize = 4;
+  const [userStoriesCurrentPage, setUserStoriesCurrentPage] = React.useState(1);
+  const [userStoriesRenderedData, setUserStoriesRenderedData] = React.useState<
+    Story[]
+  >([]);
+  const [isLoading, setIsLoading] = React.useState(false);
+
+  const pagination = (data: Story[], currentPage: number, pageSize: number) => {
+    const startIndex = (currentPage - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+    if (startIndex >= data.length) {
+      return [];
+    }
+    return data.slice(startIndex, endIndex);
+  };
+
+  React.useEffect(() => {
+    setIsLoading(true);
+    const initialData = pagination(
+      userStories,
+      userStoriesCurrentPage,
+      userStoriesPageSize,
+    );
+    setUserStoriesRenderedData(initialData);
+    setIsLoading(false);
+  }, []);
+
   return (
     <SafeAreaView>
       <View style={globalStyle.header}>
@@ -77,14 +106,33 @@ const App = () => {
           renderItem={({item}) => {
             return (
               <UserStory
+                key={item.id}
                 firstName={item.firstName}
                 profileImage={item.profileImage}
               />
             );
           }}
-          data={userStories}
+          data={userStoriesRenderedData}
           horizontal
           showsHorizontalScrollIndicator={false}
+          onEndReachedThreshold={0.5}
+          onEndReached={() => {
+            if (isLoading) {
+              return;
+            }
+            setIsLoading(true);
+            const contentToAppend = pagination(
+              userStories,
+              userStoriesCurrentPage + 1,
+              userStoriesPageSize,
+            );
+            if (contentToAppend.length === 0) {
+              return;
+            }
+            setUserStoriesCurrentPage(userStoriesCurrentPage + 1);
+            setUserStoriesRenderedData(prev => [...prev, ...contentToAppend]);
+            setIsLoading(false);
+          }}
         />
       </View>
     </SafeAreaView>
