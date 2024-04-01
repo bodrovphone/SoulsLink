@@ -38,6 +38,22 @@ const style = StyleSheet.create({
   likesContainer: {
     flexDirection: 'row',
   },
+  commentsContainer: {
+    marginLeft: 20,
+    flexDirection: 'row',
+  },
+  bookmarkContainer: {
+    marginLeft: 20,
+    flexDirection: 'row',
+  },
+  userPostStats: {
+    marginLeft: 10,
+    flexDirection: 'row',
+  },
+  postText: {
+    marginLeft: 3,
+    color: '#79869F',
+  },
 });
 
 export default style;

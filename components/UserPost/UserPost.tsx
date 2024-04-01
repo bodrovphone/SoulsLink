@@ -22,8 +22,6 @@ type Props = {
 };
 
 export const UserPost = (props: Props) => {
-  console.log(props);
-
   return (
     <View style={style.userPostContainer}>
       <View style={style.user}>
@@ -46,42 +44,20 @@ export const UserPost = (props: Props) => {
       <View style={style.postImage}>
         <Image source={props.image} />
       </View>
-      <View
-        style={{
-          marginLeft: 10,
-          flexDirection: 'row',
-        }}>
+      <View style={style.userPostStats}>
         <View style={style.likesContainer}>
           <FontAwesomeIcon icon={faHeart} color="#79869F" />
-          <Text
-            style={{
-              marginLeft: 3,
-              color: '#79869F',
-            }}>
-            {props.likes}
-          </Text>
+          <Text style={style.postText}>{props.likes}</Text>
         </View>
 
-        <View style={[style.likesContainer, {marginLeft: 27}]}>
+        <View style={style.commentsContainer}>
           <FontAwesomeIcon icon={faMessage} color="#79869F" />
-          <Text
-            style={{
-              marginLeft: 3,
-              color: '#79869F',
-            }}>
-            {props.comments}
-          </Text>
+          <Text style={style.postText}>{props.comments}</Text>
         </View>
 
-        <View style={[style.likesContainer, {marginLeft: 27}]}>
+        <View style={style.bookmarkContainer}>
           <FontAwesomeIcon icon={faBookmark} color="#79869F" />
-          <Text
-            style={{
-              marginLeft: 3,
-              color: '#79869F',
-            }}>
-            {props.bookmarks}
-          </Text>
+          <Text style={style.postText}>{props.bookmarks}</Text>
         </View>
       </View>
     </View>

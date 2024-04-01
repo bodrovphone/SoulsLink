@@ -16,6 +16,7 @@ import UserStory from './components/UserStory/UserStory';
 import {userPosts} from './data/userPosts';
 import {userStories} from './data/userStories';
 import {Post, Story} from './types';
+import {pagination} from './utils/pagination';
 
 const App = () => {
   const userStoriesPageSize = 4;
@@ -25,21 +26,12 @@ const App = () => {
   >([]);
   const [isLoadingStories, setIsLoadingStories] = React.useState(false);
 
-  const userPostsPageSize = 4;
+  const userPostsPageSize = 2;
   const [userPostsCurrentPage, setUserPostsCurrentPage] = React.useState(1);
   const [userPostsRenderedData, setUserPostsRenderedData] = React.useState<
     Post[]
   >([]);
   const [isLoadingPosts, setIsLoadingPosts] = React.useState(false);
-
-  const pagination = (data: Story[], currentPage: number, pageSize: number) => {
-    const startIndex = (currentPage - 1) * pageSize;
-    const endIndex = startIndex + pageSize;
-    if (startIndex >= data.length) {
-      return [];
-    }
-    return data.slice(startIndex, endIndex);
-  };
 
   React.useEffect(() => {
     setIsLoadingStories(true);
@@ -50,6 +42,19 @@ const App = () => {
     );
     setUserStoriesRenderedData(initialData);
     setIsLoadingStories(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  React.useEffect(() => {
+    setIsLoadingPosts(true);
+    const initialData = pagination(
+      userPosts,
+      userPostsCurrentPage,
+      userPostsPageSize,
+    );
+    setUserPostsRenderedData(initialData);
+    setIsLoadingPosts(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -111,7 +116,7 @@ const App = () => {
               </View>
             </>
           }
-          data={userPosts}
+          data={userPostsRenderedData}
           showsVerticalScrollIndicator={false}
           renderItem={({item}) => {
             return (
@@ -129,6 +134,24 @@ const App = () => {
                 />
               </View>
             );
+          }}
+          onEndReachedThreshold={0.5}
+          onEndReached={() => {
+            if (isLoadingPosts) {
+              return;
+            }
+            setIsLoadingPosts(true);
+            const contentToAppend = pagination(
+              userPosts,
+              userPostsCurrentPage + 1,
+              userPostsPageSize,
+            );
+            if (contentToAppend.length === 0) {
+              return;
+            }
+            setUserPostsCurrentPage(userPostsCurrentPage + 1);
+            setUserPostsRenderedData(prev => [...prev, ...contentToAppend]);
+            setIsLoadingPosts(false);
           }}
         />
       </View>
