@@ -11,6 +11,7 @@ import {
 import Title from './components/Title/Title';
 
 import globalStyle from './assets/styles/globalStyle';
+import {scaleFontSize} from './assets/styles/scaling';
 import {UserPost} from './components/UserPost/UserPost';
 import UserStory from './components/UserStory/UserStory';
 import {userPosts} from './data/userPosts';
@@ -68,7 +69,7 @@ const App = () => {
                 <TouchableOpacity style={globalStyle.messageIcon}>
                   <FontAwesomeIcon
                     icon={faEnvelope}
-                    size={20}
+                    size={scaleFontSize(20)}
                     color={'#898DAE'}
                   />
                   <View style={globalStyle.messageNumberContainer}>

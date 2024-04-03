@@ -7,6 +7,7 @@ import {faEllipsisH} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import React from 'react';
 import {Image, ImageSourcePropType, Text, View} from 'react-native';
+import {horizontalScale} from '../../assets/styles/scaling';
 import UserProfileImage from '../UserProfileImage/UserProfileImage';
 import style from './style';
 
@@ -28,7 +29,7 @@ export const UserPost = (props: Props) => {
         <View style={style.userContainer}>
           <UserProfileImage
             profileImage={props.profileImage}
-            imageDimensions={48}
+            imageDimensions={horizontalScale(48)}
           />
           <View style={style.userTextContainer}>
             <Text style={style.userName}>
