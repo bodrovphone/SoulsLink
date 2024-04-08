@@ -1,11 +1,9 @@
 {
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
-  "files.autoSave": "onWindowChange",
   "editor.codeActionsOnSave": {
     "source.organizeImports": "always"
   },
-  "editor.autoClosingBrackets": "languageDefined",
   "javascript.suggest.autoImports": true,
   "typescript.suggest.autoImports": true
 }
