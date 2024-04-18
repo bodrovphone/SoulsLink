@@ -1,9 +1,10 @@
 import React from 'react';
 import {Image, SafeAreaView, ScrollView, Text, View} from 'react-native';
 import globalStyle from '../../assets/styles/globalStyle';
+import {ProfileTabsNavigation} from '../../navigation/MainNavigation';
 import style from './style';
 
-const Profile = ({navigation}: any) => {
+const Profile = () => {
   return (
     <SafeAreaView style={[globalStyle.backgroundWhite, globalStyle.flex]}>
       <ScrollView contentContainerStyle={globalStyle.flexGrow}>
@@ -32,6 +33,9 @@ const Profile = ({navigation}: any) => {
             <Text style={style.statsAmount}>100</Text>
             <Text style={style.statsType}>Posts</Text>
           </View>
+        </View>
+        <View style={globalStyle.flex}>
+          <ProfileTabsNavigation />
         </View>
       </ScrollView>
     </SafeAreaView>
